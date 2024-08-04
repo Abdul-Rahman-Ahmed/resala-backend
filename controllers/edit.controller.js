@@ -1,4 +1,3 @@
-const excel = require("exceljs");
 const path = require("path");
 
 const volunteersController = async (req, res) => {
@@ -30,7 +29,7 @@ const editController = async (req, res) => {
 };
 
 const downloadSheet = (req, res) => {
-  const filePath = path.join(__dirname, "../main.xlsx");
+  const filePath = path.join(__dirname, "../public/main.xlsx");
   res.download(filePath, "شيت المشاركات.xlsx", (err) => {
     if (err) {
       console.error("Error downloading the file:", err);
