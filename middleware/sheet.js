@@ -1,8 +1,11 @@
 const excel = require("exceljs");
+const path = require("path");
 const sheet = async (req, res, next) => {
   try {
     const workbook = new excel.Workbook();
-    await workbook.xlsx.readFile("../public/main.xlsx");
+    await workbook.xlsx.readFile(
+      path.join(__dirname, "..", "public", "main.xlsx")
+    );
     const workSheet = workbook.worksheets[0];
     req.workSheet = workSheet;
     req.workbook = workbook;
