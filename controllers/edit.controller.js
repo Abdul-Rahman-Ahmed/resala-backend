@@ -1,4 +1,5 @@
 const path = require("path");
+const filePath = path.join(__dirname, "..", "public", "main.xlsx");
 
 const volunteersController = async (req, res) => {
   try {
@@ -24,12 +25,11 @@ const editController = async (req, res) => {
   const workbook = req.workbook;
   const row = workSheet.getRow(+id + 1);
   row.getCell(2 + +date).value = 1;
-  await workbook.xlsx.writeFile("./main.xlsx");
+  await workbook.xlsx.writeFile(filePath);
   res.json({ update: "update is done" });
 };
 
 const downloadSheet = (req, res) => {
-  const filePath = path.join(__dirname, "../public/main.xlsx");
   res.download(filePath, "شيت المشاركات.xlsx", (err) => {
     if (err) {
       console.error("Error downloading the file:", err);
