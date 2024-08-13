@@ -37,9 +37,34 @@ const login = asyncWrapper(async (req, res, next) => {
   }
 });
 
+const register = asyncWrapper(async (req, res, next) => {
+  const { firstName, lastName, email, password } = req.body;
+  const oldUser = await Users.findOne({ email: email });
+  if (oldUser) {
+    const error = appError.create(
+      400,
+      requestStatus.FAIL,
+      "this user already exists"
+    );
+    return next(error);
+  }
+  if (!firstName || !lastName || !email || !password) {
+    appError.create(401, requestStatus.FAIL, "mising data");
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = new Users({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
+  await newUser.save();
+  res.status(201).json({ status: requestStatus.SUCCESS, user: newUser });
+});
+
 const getUsers = async (req, res) => {
   const users = await Users.find();
   res.json({ users });
 };
 
-module.exports = { login, getUsers };
+module.exports = { login, register, getUsers };
